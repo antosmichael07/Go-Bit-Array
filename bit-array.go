@@ -1,18 +1,20 @@
 package main
 
-import "fmt"
-
 type BitArray struct {
 	Array []byte
 	Len   int
 }
 
-func NewBitArray(n int) BitArray {
+func makeBytes(n int) []byte {
 	if n%8 == 0 {
-		return BitArray{Array: make([]byte, n/8), Len: n}
+		return make([]byte, n/8)
 	} else {
-		return BitArray{Array: make([]byte, n/8+1), Len: n}
+		return make([]byte, n/8+1)
 	}
+}
+
+func NewBitArray(n int) BitArray {
+	return BitArray{Array: makeBytes(n), Len: n}
 }
 
 func (barr *BitArray) On(i int) {
@@ -29,7 +31,7 @@ func (barr *BitArray) Get(i int) bool {
 	return barr.Array[i/8]&(1<<(i%8)) != 0
 }
 
-func Slice(barr BitArray, start int, end int) BitArray {
+func (barr *BitArray) Slice(start int, end int) BitArray {
 	new_barr := NewBitArray(end - start)
 
 	for i := start; i < end; i++ {
@@ -41,25 +43,7 @@ func Slice(barr BitArray, start int, end int) BitArray {
 	return new_barr
 }
 
-func Append(barr1 BitArray, barr2 BitArray) BitArray {
-	new_barr := NewBitArray(barr1.Len + barr2.Len)
-
-	for i := 0; i < barr1.Len; i++ {
-		if barr1.Get(i) {
-			new_barr.On(i)
-		}
-	}
-
-	for i := 0; i < barr2.Len; i++ {
-		if barr2.Get(i) {
-			new_barr.On(barr1.Len + i)
-		}
-	}
-
-	return new_barr
-}
-
-func (barr *BitArray) Slice(start int, end int) {
+func (barr *BitArray) SliceSet(start int, end int) {
 	new_barr := NewBitArray(end - start)
 
 	for i := start; i < end; i++ {
@@ -71,7 +55,7 @@ func (barr *BitArray) Slice(start int, end int) {
 	*barr = new_barr
 }
 
-func (barr1 *BitArray) Append(barr2 BitArray) {
+func Append(barr1 *BitArray, barr2 *BitArray) BitArray {
 	new_barr := NewBitArray(barr1.Len + barr2.Len)
 
 	for i := 0; i < barr1.Len; i++ {
@@ -86,7 +70,25 @@ func (barr1 *BitArray) Append(barr2 BitArray) {
 		}
 	}
 
-	*barr1 = new_barr
+	return new_barr
+}
+
+func (barr1 *BitArray) AppendSet(barr2 *BitArray) {
+	old_barr1 := *barr1
+	barr1.Array = makeBytes(barr1.Len + barr2.Len)
+	barr1.Len += barr2.Len
+
+	for i := 0; i < old_barr1.Len; i++ {
+		if old_barr1.Get(i) {
+			barr1.On(i)
+		}
+	}
+
+	for i := 0; i < barr2.Len; i++ {
+		if barr2.Get(i) {
+			barr1.On(old_barr1.Len + i)
+		}
+	}
 }
 
 func main() {
@@ -96,9 +98,9 @@ func main() {
 	barr2 := NewBitArray(5)
 	barr2.On(2)
 
-	barr3 := Slice(barr1, 1, 4)
+	barr1.SliceSet(0, 4)
 
-	for i := 0; i < barr3.Len; i++ {
-		fmt.Println(barr3.Get(i))
+	for i := 0; i < barr1.Len; i++ {
+		println(barr1.Get(i))
 	}
 }
