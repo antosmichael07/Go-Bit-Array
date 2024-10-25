@@ -95,14 +95,26 @@ func (barr1 *BitArray) AppendSet(barr2 *BitArray) {
 	}
 }
 
-func (barr *BitArray) SetAllOn() {
+func (barr *BitArray) AllOn() {
 	for i := 0; i < barr.Len; i++ {
 		barr.On(i)
 	}
 }
 
-func (barr *BitArray) SetAllOff() {
+func (barr *BitArray) AllOff() {
 	for i := 0; i < barr.Len; i++ {
+		barr.Off(i)
+	}
+}
+
+func (barr *BitArray) RangeOn(start int, end int) {
+	for i := start; i < barr.Len; i++ {
+		barr.On(i)
+	}
+}
+
+func (barr *BitArray) RangeOff(start int, end int) {
+	for i := start; i < barr.Len; i++ {
 		barr.Off(i)
 	}
 }
@@ -126,7 +138,8 @@ func main() {
 	barr2 := NewBitArray(5)
 	barr2.On(2)
 
-	barr1.Resize(8)
+	barr1.AllOff()
+	barr1.RangeOn(2, 5)
 
 	for i := 0; i < barr1.Len; i++ {
 		println(barr1.Get(i))
