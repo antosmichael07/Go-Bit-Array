@@ -13,8 +13,14 @@ func makeBytes(n int) []byte {
 	}
 }
 
-func NewBitArray(n int) BitArray {
-	return BitArray{Array: makeBytes(n), Len: n}
+func NewBitArray(n int, b bool) BitArray {
+	barr := BitArray{Array: makeBytes(n), Len: n}
+
+	if b {
+		barr.AllOn()
+	}
+
+	return barr
 }
 
 func (barr *BitArray) Get(i int) bool {
@@ -60,7 +66,7 @@ func (barr *BitArray) RangeOff(start int, end int) {
 }
 
 func (barr *BitArray) Slice(start int, end int) BitArray {
-	new_barr := NewBitArray(end - start)
+	new_barr := NewBitArray(end-start, false)
 
 	for i := start; i < end; i++ {
 		if barr.Get(i) {
@@ -72,7 +78,7 @@ func (barr *BitArray) Slice(start int, end int) BitArray {
 }
 
 func (barr *BitArray) SliceSet(start int, end int) {
-	new_barr := NewBitArray(end - start)
+	new_barr := NewBitArray(end-start, false)
 
 	for i := start; i < end; i++ {
 		if barr.Get(i) {
@@ -84,7 +90,7 @@ func (barr *BitArray) SliceSet(start int, end int) {
 }
 
 func Append(barr1 *BitArray, barr2 *BitArray) BitArray {
-	new_barr := NewBitArray(barr1.Len + barr2.Len)
+	new_barr := NewBitArray(barr1.Len+barr2.Len, false)
 
 	for i := 0; i < barr1.Len; i++ {
 		if barr1.Get(i) {
@@ -132,14 +138,13 @@ func (barr *BitArray) Resize(n int) {
 }
 
 func main() {
-	barr1 := NewBitArray(5)
+	barr1 := NewBitArray(5, false)
 	barr1.On(1)
 	barr1.On(3)
-	barr2 := NewBitArray(5)
-	barr2.On(2)
+	barr2 := NewBitArray(5, true)
+	barr2.Off(2)
 
-	barr1.AllOff()
-	barr1.RangeOn(2, 5)
+	barr1.AppendSet(&barr2)
 
 	for i := 0; i < barr1.Len; i++ {
 		println(barr1.Get(i))
