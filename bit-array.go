@@ -103,6 +103,18 @@ func (barr *BitArray) SetAllOff() {
 	}
 }
 
+func (barr *BitArray) Resize(n int) {
+	old_barr := *barr
+	barr.Array = makeBytes(n)
+	barr.Len = n
+
+	for i := 0; i < min(n, old_barr.Len); i++ {
+		if old_barr.Get(i) {
+			barr.On(i)
+		}
+	}
+}
+
 func main() {
 	barr1 := NewBitArray(5)
 	barr1.On(1)
@@ -110,7 +122,7 @@ func main() {
 	barr2 := NewBitArray(5)
 	barr2.On(2)
 
-	barr1.SetAllOn()
+	barr1.Resize(8)
 
 	for i := 0; i < barr1.Len; i++ {
 		println(barr1.Get(i))
