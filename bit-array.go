@@ -17,7 +17,7 @@ func NewBitArray(n int, b bool) BitArray {
 	barr := BitArray{Array: makeBytes(n), Len: n}
 
 	if b {
-		barr.AllOn()
+		barr.OnAll()
 	}
 
 	return barr
@@ -41,25 +41,25 @@ func (barr *BitArray) Off(i int) {
 	}
 }
 
-func (barr *BitArray) AllOn() {
+func (barr *BitArray) OnAll() {
 	for i := 0; i < barr.Len; i++ {
 		barr.On(i)
 	}
 }
 
-func (barr *BitArray) AllOff() {
+func (barr *BitArray) OffAll() {
 	for i := 0; i < barr.Len; i++ {
 		barr.Off(i)
 	}
 }
 
-func (barr *BitArray) RangeOn(start int, end int) {
+func (barr *BitArray) OnRange(start int, end int) {
 	for i := start; i < barr.Len; i++ {
 		barr.On(i)
 	}
 }
 
-func (barr *BitArray) RangeOff(start int, end int) {
+func (barr *BitArray) OffRange(start int, end int) {
 	for i := start; i < barr.Len; i++ {
 		barr.Off(i)
 	}
