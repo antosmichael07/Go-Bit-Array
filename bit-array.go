@@ -17,6 +17,14 @@ func NewBitArray(n int) BitArray {
 	return BitArray{Array: makeBytes(n), Len: n}
 }
 
+func (barr *BitArray) Get(i int) bool {
+	return barr.Array[i/8]&(1<<(i%8)) != 0
+}
+
+func (barr *BitArray) Flip(i int) {
+	barr.Array[i/8] ^= 1 << (i % 8)
+}
+
 func (barr *BitArray) On(i int) {
 	barr.Array[i/8] |= 1 << (i % 8)
 }
@@ -27,12 +35,28 @@ func (barr *BitArray) Off(i int) {
 	}
 }
 
-func (barr *BitArray) Flip(i int) {
-	barr.Array[i/8] ^= 1 << (i % 8)
+func (barr *BitArray) AllOn() {
+	for i := 0; i < barr.Len; i++ {
+		barr.On(i)
+	}
 }
 
-func (barr *BitArray) Get(i int) bool {
-	return barr.Array[i/8]&(1<<(i%8)) != 0
+func (barr *BitArray) AllOff() {
+	for i := 0; i < barr.Len; i++ {
+		barr.Off(i)
+	}
+}
+
+func (barr *BitArray) RangeOn(start int, end int) {
+	for i := start; i < barr.Len; i++ {
+		barr.On(i)
+	}
+}
+
+func (barr *BitArray) RangeOff(start int, end int) {
+	for i := start; i < barr.Len; i++ {
+		barr.Off(i)
+	}
 }
 
 func (barr *BitArray) Slice(start int, end int) BitArray {
@@ -92,30 +116,6 @@ func (barr1 *BitArray) AppendSet(barr2 *BitArray) {
 		if barr2.Get(i) {
 			barr1.On(old_barr1.Len + i)
 		}
-	}
-}
-
-func (barr *BitArray) AllOn() {
-	for i := 0; i < barr.Len; i++ {
-		barr.On(i)
-	}
-}
-
-func (barr *BitArray) AllOff() {
-	for i := 0; i < barr.Len; i++ {
-		barr.Off(i)
-	}
-}
-
-func (barr *BitArray) RangeOn(start int, end int) {
-	for i := start; i < barr.Len; i++ {
-		barr.On(i)
-	}
-}
-
-func (barr *BitArray) RangeOff(start int, end int) {
-	for i := start; i < barr.Len; i++ {
-		barr.Off(i)
 	}
 }
 
