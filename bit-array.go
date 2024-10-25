@@ -27,6 +27,10 @@ func (barr *BitArray) Off(i int) {
 	}
 }
 
+func (barr *BitArray) Flip(i int) {
+	barr.Array[i/8] ^= 1 << (i % 8)
+}
+
 func (barr *BitArray) Get(i int) bool {
 	return barr.Array[i/8]&(1<<(i%8)) != 0
 }
