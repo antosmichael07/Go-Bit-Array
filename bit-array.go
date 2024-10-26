@@ -1,4 +1,4 @@
-package main
+package ba
 
 type BitArray struct {
 	Array []byte
@@ -134,19 +134,5 @@ func (barr *BitArray) Resize(n int) {
 		if old_barr.Get(i) {
 			barr.On(i)
 		}
-	}
-}
-
-func main() {
-	barr1 := NewBitArray(5, false)
-	barr1.On(1)
-	barr1.On(3)
-	barr2 := NewBitArray(5, true)
-	barr2.Off(2)
-
-	barr1.AppendSet(&barr2)
-
-	for i := 0; i < barr1.Len; i++ {
-		println(barr1.Get(i))
 	}
 }
