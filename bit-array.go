@@ -54,13 +54,13 @@ func (barr *BitArray) OffAll() {
 }
 
 func (barr *BitArray) OnRange(start int, end int) {
-	for i := start; i < barr.Len; i++ {
+	for i := start; i < end; i++ {
 		barr.On(i)
 	}
 }
 
 func (barr *BitArray) OffRange(start int, end int) {
-	for i := start; i < barr.Len; i++ {
+	for i := start; i < end; i++ {
 		barr.Off(i)
 	}
 }
