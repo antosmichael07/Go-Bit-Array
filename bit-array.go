@@ -41,6 +41,14 @@ func (barr *BitArray) Off(i int) {
 	}
 }
 
+func (barr *BitArray) Switch(i int, b bool) {
+	if b {
+		barr.On(i)
+	} else {
+		barr.Off(i)
+	}
+}
+
 func (barr *BitArray) OnAll() {
 	for i := 0; i < barr.Len; i++ {
 		barr.On(i)
